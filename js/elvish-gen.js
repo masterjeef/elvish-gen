@@ -6,8 +6,6 @@ var elvishGen = elvishGen || {};
 
 (function(eg){
 
-    console.log("hello");
-
     var alphabet = {
         vowels : {
             'a' : 'a',
@@ -56,7 +54,7 @@ var elvishGen = elvishGen || {};
 
     eg.isVowel = function (value){
             return alphabet.vowels[value];
-    }
+    };
 
     eg.isConsonant = function (value){
             return alphabet.consonants[value];
@@ -64,7 +62,7 @@ var elvishGen = elvishGen || {};
 
     eg.isSupplementary = function(value) {
         return alphabet.supplementary[value];
-    }
+    };
 
     function ElvishNode(middle, top, bottom, nextNode) {
         this.top = top;
@@ -101,36 +99,9 @@ var elvishGen = elvishGen || {};
 
     }
 
-    /*
-    for(var i = 0; i < word.length; i++){
-        var segment = word.charAt(i);
-        var nextChar = word.charAt(i + 1) ;
-
-        if(nextChar === segment || isSupplementary(segment + nextChar)) {
-            segment += word.charAt(i + 1);
-        }
-
-        if(isVowel(segment)) {
-            // up or down?
-            if (segment == 'y' || (segment === 'e' && isSilentE(i, word))) {
-                    currentNode.bottom = segment;
-            } else if (segment) {
-                    currentNode.top = segment;
-            }
-        } else {
-            currentNode.middle = segment;
-        }
-
-        // we should skip, depending on how many letters were consolidated
-        i += (currentNode.totalLetterCount() - 1);
-    }
-    */
-
-    // foreach letter
-
     eg.removeFromFront = function (value, amountToRemove){
         return value.substring(amountToRemove, value.length);
-    }
+    };
 
     function parseElvishNodes(characters) {
         // base case
