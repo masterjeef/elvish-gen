@@ -72,10 +72,6 @@ var elvishGen = elvishGen || {};
         return index === (word.length - 1);
     }
 
-    function elvishCharacter(englishCharacter, isDouble) {
-
-    }
-
     function ElvishNode(middle, top, bottom, nextNode) {
         this.top = top;
         this.middle = middle;
@@ -138,7 +134,7 @@ var elvishGen = elvishGen || {};
         var node = new ElvishNode();
 
         // top
-            // vowel || or double vowell
+            // vowel || or double vowel
 
         // middle
             // consonant
