@@ -54,22 +54,16 @@ var elvishGen = elvishGen || {};
         }
     };
 
-    function isVowel(value){
-            return alphabet.vowels[value.charAt(0)];
+    eg.isVowel = function (value){
+            return alphabet.vowels[value];
     }
 
-    function isConsonant(value){
-            return alphabet.consonants[value.charAt(0)];
-    }
+    eg.isConsonant = function (value){
+            return alphabet.consonants[value];
+    };
 
-    function isSupplementary(value) {
+    eg.isSupplementary = function(value) {
         return alphabet.supplementary[value];
-    }
-
-    function isSilentE(index, word){
-        // typically a silent e is at the end of a word,
-        // there are some contradictions to this logic but we won't worry about that right now
-        return index === (word.length - 1);
     }
 
     function ElvishNode(middle, top, bottom, nextNode) {
@@ -80,23 +74,31 @@ var elvishGen = elvishGen || {};
 
         var that = this;
 
-        this.letterCount = function() {
-            var count = 0;
-
-            if(that.top){
-                count += that.top.length;
+        this.topCount = function() {
+            if(that.top) {
+                return that.top.length;
             }
+            return 0;
+        };
 
-            if(that.middle){
-                count += that.middle.length;
+        this.middleCount = function() {
+            if(that.middle) {
+                return that.middle.length;
             }
+            return 0;
+        };
 
+        this.bottomCount = function () {
             if(that.bottom) {
-                count += that.bottom.length;
+                return that.bottom.length;
             }
+            return 0;
+        };
 
-            return count;
-        }
+        this.totalLetterCount = function() {
+            return that.topCount() + that.middleCount() + that.bottomCount();
+        };
+
     }
 
     /*
@@ -120,33 +122,81 @@ var elvishGen = elvishGen || {};
         }
 
         // we should skip, depending on how many letters were consolidated
-        i += (currentNode.letterCount() - 1);
+        i += (currentNode.totalLetterCount() - 1);
     }
     */
 
     // foreach letter
 
+    eg.removeFromFront = function (value, amountToRemove){
+        return value.substring(amountToRemove, value.length);
+    }
+
     function parseElvishNodes(characters) {
+        // base case
         if(!characters || characters.length === 0){
-            return null;
+            return undefined;
         }
 
         var node = new ElvishNode();
 
-        // top
-            // vowel || or double vowel
+        // middle section
+            // consonant || double consonant || supplementary
+        var firstTwo = characters.substring(0, 2),
+            isConsonant = eg.isConsonant(characters.charAt(0)),
+            isDouble = firstTwo.charAt(0) === firstTwo.charAt(1),
+            isDoubleConsonant = eg.isConsonant(firstTwo.charAt(0)) && eg.isConsonant(firstTwo.charAt(1)),
+            isSupplementary = eg.isSupplementary(firstTwo);
 
-        // middle
-            // consonant
+        if((isDouble && isDoubleConsonant) || isSupplementary) {
+            node.middle = firstTwo;
+        } else if (isConsonant) {
+            node.middle = characters.charAt(0);
+        }
 
-        // bottom
-            // 'y' or silent 'e'
+        characters = eg.removeFromFront(characters, node.middleCount());
 
-        node.middle = characters.charAt(0);
+        // bottom section
+        // 'y' || silent 'e' || double 'y' || double 'e'
+        firstTwo = characters.substring(0, 2),
+        isDouble = firstTwo.charAt(0) === firstTwo.charAt(1);
+        var isDoubleE = isDouble && firstTwo.charAt(0) === 'e',
+            isDoubleY = isDouble && firstTwo.charAt(0) === 'y',
+            isSilentE = !isDouble && characters.charAt(0) === 'e' && characters.length === 1;
 
-        var remainingCharacters = characters.substring(node.letterCount(),  characters.length);
+        if(isDoubleE || isDoubleY){
+            node.bottom = firstTwo;
+        } else if(isSilentE) {
+            node.bottom = characters.charAt(0);
+        }
 
-        node.nextNode = parseElvishNodes(remainingCharacters);
+        characters = eg.removeFromFront(characters, node.bottomCount());
+
+        // top section
+        // vowel || double vowel
+        firstTwo = characters.substring(0, 2),
+        isDouble = firstTwo.charAt(0) === firstTwo.charAt(1);
+        var isVowel = eg.isVowel(characters.charAt(0)),
+            isDoubleVowel = isDouble && isVowel;
+
+        if(isDoubleVowel) {
+            node.top = firstTwo;
+        } else if(isVowel) {
+            node.top = characters.charAt(0);
+        }
+
+        characters = eg.removeFromFront(characters, node.topCount());
+
+        // unrecognized character...
+        // just stick it in the middle and continue
+        if (node.totalLetterCount() === 0){
+            node.middle = characters.charAt(0);
+            characters = eg.removeFromFront(characters, 1);
+        }
+
+        //var remainingCharacters = characters.substring(node.totalLetterCount(),  characters.length);
+
+        node.nextNode = parseElvishNodes(characters);
 
         return node;
     }
