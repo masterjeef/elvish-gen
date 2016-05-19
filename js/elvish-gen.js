@@ -2,9 +2,12 @@
  * Created by Jeff on 5/17/2016.
  */
 
-var elvishGen = elvishGen || {};
+var elvishGenerator = elvishGenerator || {};
 
 (function(eg){
+
+    // alphabet
+    // eventually the
 
     var alphabet = {
         vowels : {
@@ -52,19 +55,63 @@ var elvishGen = elvishGen || {};
         }
     };
 
-    eg.isVowel = function (value){
-            return alphabet.vowels[value];
+    // Common string functions (this is probably bad, move this into separate object later)
+
+    // figure out a better way to do this for all
+    if(String.prototype.isVowel) {
+        console.warn('function : String.prototype.isVowel already exists.')
+    }
+
+    String.prototype.isVowel = function (){
+            return alphabet.vowels[this];
     };
 
-    eg.isConsonant = function (value){
-            return alphabet.consonants[value];
+    String.prototype.isSupplementary = function() {
+        return alphabet.supplementary[this];
     };
 
-    eg.isSupplementary = function(value) {
-        return alphabet.supplementary[value];
+    String.prototype.truncateFront = function (amountToRemove){
+        return this.substring(amountToRemove, this.length);
     };
 
-    function ElvishNode(middle, top, bottom, nextNode) {
+    String.prototype.take = function (numberOfCharacters) {
+        return this.substring(0, numberOfCharacters);
+    };
+
+    String.prototype.first = function () {
+        return this.charAt(0);
+    };
+
+    String.prototype.isDouble = function (character) {
+        if(this.length !== 2) {
+            return false;
+        }
+
+        var first = this.charAt(0),
+            second = this.charAt(1);
+
+        if(character) {
+            return first === character && second === character;
+        }
+
+        return first === second;
+    };
+
+    String.prototype.isConsonant = function () {
+        return alphabet.consonants[this];
+    };
+
+    String.prototype.isDoubleConsonant = function () {
+        return this.isDouble() && this.first().isConsonant();
+    };
+
+    String.prototype.isDoubleVowel = function () {
+        return this.isDouble() && this.first().isVowel();
+    };
+
+    // "Classes"
+
+    function ElvishNode(top, middle, bottom, nextNode) {
         this.top = top;
         this.middle = middle;
         this.bottom = bottom;
@@ -99,81 +146,99 @@ var elvishGen = elvishGen || {};
 
     }
 
-    eg.removeFromFront = function (value, amountToRemove){
-        return value.substring(amountToRemove, value.length);
-    };
+    function ParserConfig () {
 
-    function parseElvishNodes(characters) {
-        // base case
-        if(!characters || characters.length === 0){
-            return undefined;
-        }
+        // We may want to configure how the parser works
 
-        var node = new ElvishNode();
-
-        // middle section
-            // consonant || double consonant || supplementary
-        var firstTwo = characters.substring(0, 2),
-            isConsonant = eg.isConsonant(characters.charAt(0)),
-            isDouble = firstTwo.charAt(0) === firstTwo.charAt(1),
-            isDoubleConsonant = eg.isConsonant(firstTwo.charAt(0)) && eg.isConsonant(firstTwo.charAt(1)),
-            isSupplementary = eg.isSupplementary(firstTwo);
-
-        if((isDouble && isDoubleConsonant) || isSupplementary) {
-            node.middle = firstTwo;
-        } else if (isConsonant) {
-            node.middle = characters.charAt(0);
-        }
-
-        characters = eg.removeFromFront(characters, node.middleCount());
-
-        // bottom section
-        // 'y' || silent 'e' || double 'y' || double 'e'
-        firstTwo = characters.substring(0, 2),
-        isDouble = firstTwo.charAt(0) === firstTwo.charAt(1);
-        var isDoubleE = isDouble && firstTwo.charAt(0) === 'e',
-            isDoubleY = isDouble && firstTwo.charAt(0) === 'y',
-            isSilentE = !isDouble && characters.charAt(0) === 'e' && characters.length === 1;
-
-        if(isDoubleE || isDoubleY){
-            node.bottom = firstTwo;
-        } else if(isSilentE) {
-            node.bottom = characters.charAt(0);
-        }
-
-        characters = eg.removeFromFront(characters, node.bottomCount());
-
-        // top section
-        // vowel || double vowel
-        firstTwo = characters.substring(0, 2),
-        isDouble = firstTwo.charAt(0) === firstTwo.charAt(1);
-        var isVowel = eg.isVowel(characters.charAt(0)),
-            isDoubleVowel = isDouble && isVowel;
-
-        if(isDoubleVowel) {
-            node.top = firstTwo;
-        } else if(isVowel) {
-            node.top = characters.charAt(0);
-        }
-
-        characters = eg.removeFromFront(characters, node.topCount());
-
-        // unrecognized character...
-        // just stick it in the middle and continue
-        if (node.totalLetterCount() === 0){
-            node.middle = characters.charAt(0);
-            characters = eg.removeFromFront(characters, 1);
-        }
-
-        //var remainingCharacters = characters.substring(node.totalLetterCount(),  characters.length);
-
-        node.nextNode = parseElvishNodes(characters);
-
-        return node;
     }
 
-    var word = 'jeff';
+    function ElvishNodeParser(config) {
+        this.config = config || new ParserConfig();
 
-    var nodes = parseElvishNodes(word);
+        var that = this;
 
-})(elvishGen);
+        this.parse = function(characters) {
+            // base case
+            if(!characters || characters.length === 0){
+                return undefined;
+            }
+
+            var node = new ElvishNode();
+            var remaining = characters;
+
+            remaining = that.tryFillMiddle(node, remaining);
+
+            remaining = that.tryFillBottom(node, remaining);
+
+            remaining = that.tryFillTop(node, remaining);
+
+            // unrecognized character... just stick it in the middle and continue
+            if (node.totalLetterCount() === 0){
+                node.middle = remaining.first();
+                remaining = remaining.truncateFront(1);
+            }
+
+            node.nextNode = that.parse(remaining);
+
+            return node;
+        };
+
+        this.tryFillMiddle = function(node, characters){
+            // middle section
+            // consonant || double consonant || supplementary
+            var firstTwo = characters.take(2);
+
+            if(firstTwo.isDoubleConsonant() || firstTwo.isSupplementary()) {
+                node.middle = firstTwo;
+            } else if (characters.first().isConsonant()) {
+                node.middle = characters.first();
+            }
+
+            return characters.truncateFront(node.middleCount());
+        };
+
+        this.tryFillBottom = function(node, characters) {
+            // bottom section
+            // 'y' || silent 'e' || double 'y' || double 'e'
+            var firstTwo = characters.take(2);
+            // TODO : find a more reliable way to determine silent e scenario
+            var isSilentE = !firstTwo.isDouble() && characters.length === 1 && characters.first() === 'e';
+
+            if(firstTwo.isDouble('e') || firstTwo.isDouble('y')){
+                node.bottom = firstTwo;
+            } else if(isSilentE || characters.first() === 'y') {
+                node.bottom = characters.first();
+            }
+
+            return characters.truncateFront(node.bottomCount());
+        };
+
+        this.tryFillTop = function(node, characters) {
+            // top section
+            // vowel || double vowel
+            var firstTwo = characters.take(2);
+
+            if(firstTwo.isDoubleVowel()) {
+                node.top = firstTwo;
+            } else if(characters.first().isVowel()) {
+                node.top = characters.first();
+            }
+
+            return characters.truncateFront(node.topCount());
+        }
+    }
+
+    var word = 'sheldon';
+
+    var parser = new ElvishNodeParser();
+
+    var nodes = parser.parse(word);
+
+    var node = nodes;
+
+    while(node) {
+        console.log((node.top || '-') + '|' + (node.middle || '-') + '|' + (node.bottom || '-'));
+        node = node.nextNode;
+    }
+
+})(elvishGenerator);
