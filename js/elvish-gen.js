@@ -7,7 +7,7 @@ var elvishGenerator = elvishGenerator || {};
 (function(eg){
 
     // alphabet
-    // eventually the
+    // eventually these will map to image paths, we will see.
 
     var alphabet = {
         vowels : {
@@ -55,7 +55,7 @@ var elvishGenerator = elvishGenerator || {};
         }
     };
 
-    // Common string functions (this is probably bad, move this into separate object later)
+    // Common string functions (this is probably bad, might move this into separate object or namespace later)
 
     // figure out a better way to do this for all
     if(String.prototype.isVowel) {
@@ -148,7 +148,7 @@ var elvishGenerator = elvishGenerator || {};
 
     function ParserConfig () {
 
-        // We may want to configure how the parser works
+        // We may want to configure how the parser works at some point
 
     }
 
@@ -227,6 +227,9 @@ var elvishGenerator = elvishGenerator || {};
             return characters.truncateFront(node.topCount());
         }
     }
+
+    // The rest is temporary, have not wired up the UI
+    // This simply demonstrates usage
 
     var word = 'sheldon';
 
