@@ -55,40 +55,37 @@ var elvishGenerator = elvishGenerator || {};
         }
     };
 
-    // Common string functions (this is probably bad, might move this into separate object or namespace later)
+    // Common Functions (static class)
 
-    // figure out a better way to do this for all
-    if(String.prototype.isVowel) {
-        console.warn('function : String.prototype.isVowel already exists.')
-    }
+    eg.Common = {};
 
-    String.prototype.isVowel = function (){
-            return alphabet.vowels[this];
+    eg.Common.isVowel = function (value){
+            return alphabet.vowels[value];
     };
 
-    String.prototype.isSupplementary = function() {
-        return alphabet.supplementary[this];
+    eg.Common.isSupplementary = function(value) {
+        return alphabet.supplementary[value];
     };
 
-    String.prototype.truncateFront = function (amountToRemove){
-        return this.substring(amountToRemove, this.length);
+    eg.Common.truncateFront = function (value, amountToRemove){
+        return value.substring(amountToRemove, value.length);
     };
 
-    String.prototype.take = function (numberOfCharacters) {
-        return this.substring(0, numberOfCharacters);
+    eg.Common.take = function (value, numberOfCharacters) {
+        return value.substring(0, numberOfCharacters);
     };
 
-    String.prototype.first = function () {
-        return this.charAt(0);
+    eg.Common.first = function (value) {
+        return value.charAt(0);
     };
 
-    String.prototype.isDouble = function (character) {
-        if(this.length !== 2) {
+    eg.Common.isDouble = function (value, character) {
+        if(value.length !== 2) {
             return false;
         }
 
-        var first = this.charAt(0),
-            second = this.charAt(1);
+        var first = value.charAt(0),
+            second = value.charAt(1);
 
         if(character) {
             return first === character && second === character;
@@ -97,16 +94,16 @@ var elvishGenerator = elvishGenerator || {};
         return first === second;
     };
 
-    String.prototype.isConsonant = function () {
-        return alphabet.consonants[this];
+    eg.Common.isConsonant = function (value) {
+        return alphabet.consonants[value];
     };
 
-    String.prototype.isDoubleConsonant = function () {
-        return this.isDouble() && this.first().isConsonant();
+    eg.Common.isDoubleConsonant = function (value) {
+        return eg.Common.isDouble(value) && eg.Common.isConsonant(eg.Common.first(value));
     };
 
-    String.prototype.isDoubleVowel = function () {
-        return this.isDouble() && this.first().isVowel();
+    eg.Common.isDoubleVowel = function (value) {
+        return eg.Common.isDouble(value) && eg.Common.isVowel(eg.Common.first(value));
     };
 
     // "Classes"
@@ -143,17 +140,9 @@ var elvishGenerator = elvishGenerator || {};
         this.totalLetterCount = function() {
             return that.topCount() + that.middleCount() + that.bottomCount();
         };
-
-    }
-
-    function ParserConfig () {
-
-        // We may want to configure how the parser works at some point
-
     }
 
     function ElvishNodeParser(config) {
-        this.config = config || new ParserConfig();
 
         var that = this;
 
@@ -186,45 +175,49 @@ var elvishGenerator = elvishGenerator || {};
         this.tryFillMiddle = function(node, characters){
             // middle section
             // consonant || double consonant || supplementary
-            var firstTwo = characters.take(2);
+            var firstTwo = eg.Common.take(characters, 2),
+                first = eg.Common.first(characters);
 
-            if(firstTwo.isDoubleConsonant() || firstTwo.isSupplementary()) {
+            if(eg.Common.isDoubleConsonant(firstTwo) || eg.Common.isSupplementary(firstTwo)) {
                 node.middle = firstTwo;
-            } else if (characters.first().isConsonant()) {
-                node.middle = characters.first();
+            } else if (eg.Common.isConsonant(first)) {
+                node.middle = first;
             }
 
-            return characters.truncateFront(node.middleCount());
+            return eg.Common.truncateFront(characters, node.middleCount());
         };
 
         this.tryFillBottom = function(node, characters) {
             // bottom section
             // 'y' || silent 'e' || double 'y' || double 'e'
-            var firstTwo = characters.take(2);
-            // TODO : find a more reliable way to determine silent e scenario
-            var isSilentE = !firstTwo.isDouble() && characters.length === 1 && characters.first() === 'e';
+            var firstTwo = eg.Common.take(characters, 2),
+                first = eg.Common.first(characters);
 
-            if(firstTwo.isDouble('e') || firstTwo.isDouble('y')){
+            // TODO : find a more reliable way to determine silent e scenario
+            var isSilentE = !eg.Common.isDouble(firstTwo) && characters.length === 1 && first === 'e';
+
+            if(eg.Common.isDouble(firstTwo, 'e') || eg.Common.isDouble(firstTwo, 'y')){
                 node.bottom = firstTwo;
-            } else if(isSilentE || characters.first() === 'y') {
-                node.bottom = characters.first();
+            } else if(isSilentE || first === 'y') {
+                node.bottom = first;
             }
 
-            return characters.truncateFront(node.bottomCount());
+            return eg.Common.truncateFront(characters, node.bottomCount());
         };
 
         this.tryFillTop = function(node, characters) {
             // top section
             // vowel || double vowel
-            var firstTwo = characters.take(2);
+            var firstTwo = eg.Common.take(characters, 2),
+                first = eg.Common.first(characters);
 
-            if(firstTwo.isDoubleVowel()) {
+            if(eg.Common.isDoubleVowel(firstTwo)) {
                 node.top = firstTwo;
-            } else if(characters.first().isVowel()) {
-                node.top = characters.first();
+            } else if(eg.Common.isVowel(first)) {
+                node.top = first;
             }
 
-            return characters.truncateFront(node.topCount());
+            return eg.Common.truncateFront(characters, node.topCount());
         }
     }
 
