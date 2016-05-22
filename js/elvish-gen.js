@@ -106,41 +106,39 @@ var elvishGenerator = elvishGenerator || {};
         return eg.Common.isDouble(value) && eg.Common.isVowel(eg.Common.first(value));
     };
 
-    // "Classes"
+    // Classes
 
     function ElvishNode(top, middle, bottom, nextNode) {
         this.top = top;
         this.middle = middle;
         this.bottom = bottom;
         this.nextNode = nextNode;
-
-        var that = this;
-
-        this.topCount = function() {
-            if(that.top) {
-                return that.top.length;
-            }
-            return 0;
-        };
-
-        this.middleCount = function() {
-            if(that.middle) {
-                return that.middle.length;
-            }
-            return 0;
-        };
-
-        this.bottomCount = function () {
-            if(that.bottom) {
-                return that.bottom.length;
-            }
-            return 0;
-        };
-
-        this.totalLetterCount = function() {
-            return that.topCount() + that.middleCount() + that.bottomCount();
-        };
     }
+
+    ElvishNode.prototype.topCount = function () {
+        if(this.top) {
+            return this.top.length;
+        }
+        return 0;
+    };
+
+    ElvishNode.prototype.middleCount = function() {
+        if(this.middle) {
+            return this.middle.length;
+        }
+        return 0;
+    };
+
+    ElvishNode.prototype.bottomCount = function () {
+        if(this.bottom) {
+            return this.bottom.length;
+        }
+        return 0;
+    };
+
+    ElvishNode.prototype.totalLetterCount = function() {
+        return this.topCount() + this.middleCount() + this.bottomCount();
+    };
 
     function ElvishNodeParser(config) {
 
