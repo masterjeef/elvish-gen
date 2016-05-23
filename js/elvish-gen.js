@@ -113,6 +113,15 @@ var elvishGenerator = elvishGenerator || {};
         this.middle = middle || '';
         this.bottom = bottom || '';
         this.nextNode = nextNode;
+
+        // Demonstration (remove me later)
+        // The reason we set that to this
+        var that = this;
+        function helper() {
+            var thisTop = this.top; // <- undefined, but it would seem that it should be the value of top
+            var thatTop = that.top; // <- the real value of top
+        }
+        helper();
     }
 
     ElvishNode.prototype.totalLetterCount = function() {
