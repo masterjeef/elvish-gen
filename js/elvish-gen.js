@@ -109,35 +109,14 @@ var elvishGenerator = elvishGenerator || {};
     // Classes
 
     function ElvishNode(top, middle, bottom, nextNode) {
-        this.top = top;
-        this.middle = middle;
-        this.bottom = bottom;
+        this.top = top || '';
+        this.middle = middle || '';
+        this.bottom = bottom || '';
         this.nextNode = nextNode;
     }
 
-    ElvishNode.prototype.topCount = function () {
-        if(this.top) {
-            return this.top.length;
-        }
-        return 0;
-    };
-
-    ElvishNode.prototype.middleCount = function() {
-        if(this.middle) {
-            return this.middle.length;
-        }
-        return 0;
-    };
-
-    ElvishNode.prototype.bottomCount = function () {
-        if(this.bottom) {
-            return this.bottom.length;
-        }
-        return 0;
-    };
-
     ElvishNode.prototype.totalLetterCount = function() {
-        return this.topCount() + this.middleCount() + this.bottomCount();
+        return this.top.length + this.middle.length + this.bottom.length;
     };
 
     function ElvishNodeParser(text) {
@@ -186,7 +165,7 @@ var elvishGenerator = elvishGenerator || {};
             node.middle = first;
         }
 
-        return eg.Common.truncateFront(characters, node.middleCount());
+        return eg.Common.truncateFront(characters, node.middle.length);
     };
 
     ElvishNodeParser.prototype.tryFillBottom = function(node, characters) {
@@ -204,7 +183,7 @@ var elvishGenerator = elvishGenerator || {};
             node.bottom = first;
         }
 
-        return eg.Common.truncateFront(characters, node.bottomCount());
+        return eg.Common.truncateFront(characters, node.bottom.length);
     };
 
     ElvishNodeParser.prototype.tryFillTop = function(node, characters) {
@@ -219,7 +198,7 @@ var elvishGenerator = elvishGenerator || {};
             node.top = first;
         }
 
-        return eg.Common.truncateFront(characters, node.topCount());
+        return eg.Common.truncateFront(characters, node.top.length);
     };
 
     // The rest is temporary, have not wired up the UI
