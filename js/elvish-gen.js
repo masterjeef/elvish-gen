@@ -140,93 +140,96 @@ var elvishGenerator = elvishGenerator || {};
         return this.topCount() + this.middleCount() + this.bottomCount();
     };
 
-    function ElvishNodeParser(config) {
-
-        var that = this;
-
-        this.parse = function(characters) {
-            // base case
-            if(!characters || characters.length === 0){
-                return undefined;
-            }
-
-            var node = new ElvishNode();
-            var remaining = characters;
-
-            remaining = that.tryFillMiddle(node, remaining);
-
-            remaining = that.tryFillBottom(node, remaining);
-
-            remaining = that.tryFillTop(node, remaining);
-
-            // unrecognized character... just stick it in the middle and continue
-            if (node.totalLetterCount() === 0){
-                node.middle = remaining.first();
-                remaining = remaining.truncateFront(1);
-            }
-
-            node.nextNode = that.parse(remaining);
-
-            return node;
-        };
-
-        this.tryFillMiddle = function(node, characters){
-            // middle section
-            // consonant || double consonant || supplementary
-            var firstTwo = eg.Common.take(characters, 2),
-                first = eg.Common.first(characters);
-
-            if(eg.Common.isDoubleConsonant(firstTwo) || eg.Common.isSupplementary(firstTwo)) {
-                node.middle = firstTwo;
-            } else if (eg.Common.isConsonant(first)) {
-                node.middle = first;
-            }
-
-            return eg.Common.truncateFront(characters, node.middleCount());
-        };
-
-        this.tryFillBottom = function(node, characters) {
-            // bottom section
-            // 'y' || silent 'e' || double 'y' || double 'e'
-            var firstTwo = eg.Common.take(characters, 2),
-                first = eg.Common.first(characters);
-
-            // TODO : find a more reliable way to determine silent e scenario
-            var isSilentE = !eg.Common.isDouble(firstTwo) && characters.length === 1 && first === 'e';
-
-            if(eg.Common.isDouble(firstTwo, 'e') || eg.Common.isDouble(firstTwo, 'y')){
-                node.bottom = firstTwo;
-            } else if(isSilentE || first === 'y') {
-                node.bottom = first;
-            }
-
-            return eg.Common.truncateFront(characters, node.bottomCount());
-        };
-
-        this.tryFillTop = function(node, characters) {
-            // top section
-            // vowel || double vowel
-            var firstTwo = eg.Common.take(characters, 2),
-                first = eg.Common.first(characters);
-
-            if(eg.Common.isDoubleVowel(firstTwo)) {
-                node.top = firstTwo;
-            } else if(eg.Common.isVowel(first)) {
-                node.top = first;
-            }
-
-            return eg.Common.truncateFront(characters, node.topCount());
-        }
+    function ElvishNodeParser(text) {
+        this.text = text;
     }
+
+    ElvishNodeParser.prototype.parseText = function () {
+        return this.parse(this.text);
+    };
+
+    ElvishNodeParser.prototype.parse = function(characters) {
+        // base case
+        if(!characters || characters.length === 0){
+            return undefined;
+        }
+
+        var node = new ElvishNode();
+        var remaining = characters;
+
+        remaining = this.tryFillMiddle(node, remaining);
+
+        remaining = this.tryFillBottom(node, remaining);
+
+        remaining = this.tryFillTop(node, remaining);
+
+        // unrecognized character... just stick it in the middle and continue
+        if (node.totalLetterCount() === 0){
+            node.middle = remaining.first();
+            remaining = remaining.truncateFront(1);
+        }
+
+        node.nextNode = this.parse(remaining);
+
+        return node;
+    };
+
+    ElvishNodeParser.prototype.tryFillMiddle = function(node, characters){
+        // middle section
+        // consonant || double consonant || supplementary
+        var firstTwo = eg.Common.take(characters, 2),
+            first = eg.Common.first(characters);
+
+        if(eg.Common.isDoubleConsonant(firstTwo) || eg.Common.isSupplementary(firstTwo)) {
+            node.middle = firstTwo;
+        } else if (eg.Common.isConsonant(first)) {
+            node.middle = first;
+        }
+
+        return eg.Common.truncateFront(characters, node.middleCount());
+    };
+
+    ElvishNodeParser.prototype.tryFillBottom = function(node, characters) {
+        // bottom section
+        // 'y' || silent 'e' || double 'y' || double 'e'
+        var firstTwo = eg.Common.take(characters, 2),
+            first = eg.Common.first(characters);
+
+        // TODO : find a more reliable way to determine silent e scenario
+        var isSilentE = !eg.Common.isDouble(firstTwo) && characters.length === 1 && first === 'e';
+
+        if(eg.Common.isDouble(firstTwo, 'e') || eg.Common.isDouble(firstTwo, 'y')){
+            node.bottom = firstTwo;
+        } else if(isSilentE || first === 'y') {
+            node.bottom = first;
+        }
+
+        return eg.Common.truncateFront(characters, node.bottomCount());
+    };
+
+    ElvishNodeParser.prototype.tryFillTop = function(node, characters) {
+        // top section
+        // vowel || double vowel
+        var firstTwo = eg.Common.take(characters, 2),
+            first = eg.Common.first(characters);
+
+        if(eg.Common.isDoubleVowel(firstTwo)) {
+            node.top = firstTwo;
+        } else if(eg.Common.isVowel(first)) {
+            node.top = first;
+        }
+
+        return eg.Common.truncateFront(characters, node.topCount());
+    };
 
     // The rest is temporary, have not wired up the UI
     // This simply demonstrates usage
 
-    var word = 'sheldon';
+    var text = 'sheldon';
 
-    var parser = new ElvishNodeParser();
+    var parser = new ElvishNodeParser(text);
 
-    var nodes = parser.parse(word);
+    var nodes = parser.parseText();
 
     var node = nodes;
 
