@@ -125,7 +125,6 @@ var elvishGenerator = elvishGenerator || {};
 
     Function.method('extends', function (Parent) {
         this.prototype = new Parent();
-        this.superClass = Parent;
         return this;
     });
 
@@ -154,6 +153,13 @@ var elvishGenerator = elvishGenerator || {};
         return this.top.length + this.middle.length + this.bottom.length;
     };
 
+    ElvishNode.prototype.print = function () {
+        console.log((this.top || '-') + '|' + (this.middle || '-') + '|' + (this.bottom || '-'));
+        if(this.nextNode) {
+            this.nextNode.print();
+        }
+    };
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ElvishNodeParser
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,17 +169,35 @@ var elvishGenerator = elvishGenerator || {};
     }
 
     ElvishNodeParser.prototype.parseText = function () {
-        // generic parser
-        var remaining = this.text;
-        var firstNode = new ElvishNode();
-        var node = firstNode;
-        while(remaining.length > 0) {
-            node.middle = eg.Common.first(remaining);
-            remaining = eg.Common.truncateFront(remaining, 1);
-            node.nextNode = new ElvishNode();
-            node = nextNode;
+        return this.parse(this.text);
+    };
+
+    ElvishNodeParser.prototype.parse = function (characters) {
+        // base case
+        if(!characters || characters.length === 0){
+            return undefined;
         }
-        return firstNode;
+
+        var node = new ElvishNode();
+
+        this.fillNode(node, characters);
+
+        // unrecognized character... just stick it in the middle and continue
+        if (node.totalLetterCount() === 0){
+            node.middle = eg.Common.first(characters)
+        }
+
+        var remaining = eg.Common.truncateFront(characters, node.totalLetterCount());
+
+        node.nextNode = this.parse(remaining);
+
+        return node;
+    };
+
+    ElvishNodeParser.prototype.fillNode = function(node, remainingCharacters) {
+        var first = eg.Common.first(remainingCharacters);
+        node.middle = first;
+        return node;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,38 +205,19 @@ var elvishGenerator = elvishGenerator || {};
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     function QuenyaParser(text) {
-        QuenyaParser.superClass.call(this, text);
+        QuenyaParser.prototype.constructor.call(this, text);
     }
 
     QuenyaParser.extends(ElvishNodeParser);
 
-    QuenyaParser.prototype.parseText = function () {
-        // call recursive parse function
-        return this.parse(this.text);
-    };
-
-    QuenyaParser.prototype.parse = function(characters) {
-        // base case
-        if(!characters || characters.length === 0){
-            return undefined;
-        }
-
-        var node = new ElvishNode();
-        var remaining = characters;
+    QuenyaParser.prototype.fillNode = function(node, remainingCharacters) {
+        var remaining = remainingCharacters;
 
         remaining = this.tryFillMiddle(node, remaining);
 
         remaining = this.tryFillBottom(node, remaining);
 
-        remaining = this.tryFillTop(node, remaining);
-
-        // unrecognized character... just stick it in the middle and continue
-        if (node.totalLetterCount() === 0){
-            node.middle = remaining.first();
-            remaining = remaining.truncateFront(1);
-        }
-
-        node.nextNode = this.parse(remaining);
+        this.tryFillTop(node, remaining);
 
         return node;
     };
@@ -275,15 +280,12 @@ var elvishGenerator = elvishGenerator || {};
 
     var text = 'sheldon';
 
-    var parser = new QuenyaParser(text);
+    var quenyaParser = new QuenyaParser(text);
+    var nodes = quenyaParser.parseText();
+    nodes.print();
 
-    var nodes = parser.parseText();
-
-    var node = nodes;
-
-    while(node) {
-        console.log((node.top || '-') + '|' + (node.middle || '-') + '|' + (node.bottom || '-'));
-        node = node.nextNode;
-    }
+    var genericParser = new ElvishNodeParser(text);
+    nodes = genericParser.parseText();
+    nodes.print();
 
 })(elvishGenerator);
