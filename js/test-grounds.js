@@ -5,17 +5,12 @@ function SuperClass(arg){
     this.prop = arg;
 };
 
-var superConstructor = function() {
-    this.__proto__.constructor(arguments);    
-};
-
-function TestClass() {
-    var superClass = SuperClass.prototype;
-    this.__proto__.constructor(arguments);
-    TestClass.prototype.constructor(arguments);
-    superConstructor.apply(this, arguments);
-    proto.apply(this.arguments);
+function TestClass(arg) {
+    TestClass.prototype.constructor.call(this, arg);
 };
 
 TestClass.prototype = new SuperClass();
+
 var test = new TestClass("argument");
+var prop = test.prop;
+
