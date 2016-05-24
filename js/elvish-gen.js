@@ -6,8 +6,10 @@ var elvishGenerator = elvishGenerator || {};
 
 (function(eg){
 
-    // alphabet
-    // eventually these will map to image paths, we will see.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Constants/Lookups
+    // Eventually these will map to image paths
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     var alphabet = {
         vowels : {
@@ -55,7 +57,9 @@ var elvishGenerator = elvishGenerator || {};
         }
     };
 
-    // Common Functions (static class)
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Common Namespace
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     eg.Common = {};
 
@@ -106,7 +110,28 @@ var elvishGenerator = elvishGenerator || {};
         return eg.Common.isDouble(value) && eg.Common.isVowel(eg.Common.first(value));
     };
 
-    // Classes
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Pseudoclassical Inheritance
+    // (Javascript The Good Parts)
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Function.prototype.method = function(name, func) {
+        if(this.prototype[name]) {
+            console.warn('Function.prototype.' + name + ' is already defined. This might be a problem.')
+        }
+        this.prototype[name] = func;
+        return this;
+    };
+
+    Function.method('extends', function (Parent) {
+        this.prototype = new Parent();
+        this.superClass = Parent;
+        return this;
+    });
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // ElvishNode
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     function ElvishNode(top, middle, bottom, nextNode) {
         this.top = top || '';
@@ -120,7 +145,8 @@ var elvishGenerator = elvishGenerator || {};
         function helper() {
             var thisTop = this.top; // <- undefined, but it would seem that it should be the value of top
             var thatTop = that.top; // <- the real value of top
-        }
+            // "this" in this context refers to the window
+        };
         helper();
     }
 
@@ -128,15 +154,44 @@ var elvishGenerator = elvishGenerator || {};
         return this.top.length + this.middle.length + this.bottom.length;
     };
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // ElvishNodeParser
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     function ElvishNodeParser(text) {
         this.text = text;
     }
 
     ElvishNodeParser.prototype.parseText = function () {
+        // generic parser
+        var remaining = this.text;
+        var firstNode = new ElvishNode();
+        var node = firstNode;
+        while(remaining.length > 0) {
+            node.middle = eg.Common.first(remaining);
+            remaining = eg.Common.truncateFront(remaining, 1);
+            node.nextNode = new ElvishNode();
+            node = nextNode;
+        }
+        return firstNode;
+    };
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // QuenyaParser
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function QuenyaParser(text) {
+        QuenyaParser.superClass.call(this, text);
+    }
+
+    QuenyaParser.extends(ElvishNodeParser);
+
+    QuenyaParser.prototype.parseText = function () {
+        // call recursive parse function
         return this.parse(this.text);
     };
 
-    ElvishNodeParser.prototype.parse = function(characters) {
+    QuenyaParser.prototype.parse = function(characters) {
         // base case
         if(!characters || characters.length === 0){
             return undefined;
@@ -162,11 +217,14 @@ var elvishGenerator = elvishGenerator || {};
         return node;
     };
 
-    ElvishNodeParser.prototype.tryFillMiddle = function(node, characters){
+    QuenyaParser.prototype.tryFillMiddle = function(node, characters){
         // middle section
         // consonant || double consonant || supplementary
         var firstTwo = eg.Common.take(characters, 2),
             first = eg.Common.first(characters);
+
+        // TODO: need to handle the two variations of r...
+        // TODO: figure out if 'y' is a consonant
 
         if(eg.Common.isDoubleConsonant(firstTwo) || eg.Common.isSupplementary(firstTwo)) {
             node.middle = firstTwo;
@@ -177,13 +235,13 @@ var elvishGenerator = elvishGenerator || {};
         return eg.Common.truncateFront(characters, node.middle.length);
     };
 
-    ElvishNodeParser.prototype.tryFillBottom = function(node, characters) {
+    QuenyaParser.prototype.tryFillBottom = function(node, characters) {
         // bottom section
         // 'y' || silent 'e' || double 'y' || double 'e'
         var firstTwo = eg.Common.take(characters, 2),
             first = eg.Common.first(characters);
 
-        // TODO : find a more reliable way to determine silent e scenario
+        // TODO : find a more reliable way to determine silent e
         var isSilentE = !eg.Common.isDouble(firstTwo) && characters.length === 1 && first === 'e';
 
         if(eg.Common.isDouble(firstTwo, 'e') || eg.Common.isDouble(firstTwo, 'y')){
@@ -195,7 +253,7 @@ var elvishGenerator = elvishGenerator || {};
         return eg.Common.truncateFront(characters, node.bottom.length);
     };
 
-    ElvishNodeParser.prototype.tryFillTop = function(node, characters) {
+    QuenyaParser.prototype.tryFillTop = function(node, characters) {
         // top section
         // vowel || double vowel
         var firstTwo = eg.Common.take(characters, 2),
@@ -210,12 +268,14 @@ var elvishGenerator = elvishGenerator || {};
         return eg.Common.truncateFront(characters, node.top.length);
     };
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // The rest is temporary, have not wired up the UI
     // This simply demonstrates usage
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     var text = 'sheldon';
 
-    var parser = new ElvishNodeParser(text);
+    var parser = new QuenyaParser(text);
 
     var nodes = parser.parseText();
 
