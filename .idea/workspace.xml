@@ -36,8 +36,8 @@
       <file leaf-file-name="elvish-gen.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/elvish-gen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
+            <state relative-caret-position="234">
+              <caret line="122" column="8" selection-start-line="122" selection-start-column="8" selection-end-line="122" selection-end-column="8" />
               <folding>
                 <element signature="e#0#40#0" expanded="false" />
               </folding>
@@ -290,12 +290,12 @@
       <workItem from="1463887554662" duration="676000" />
       <workItem from="1463888379788" duration="867000" />
       <workItem from="1463979364476" duration="3567000" />
-      <workItem from="1464009203554" duration="22958000" />
+      <workItem from="1464009203554" duration="24126000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="73795000" />
+    <option name="totallyTimeSpent" value="74963000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -335,12 +335,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/js/elvish-gen.js</url>
-          <line>283</line>
+          <line>265</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/js/elvish-gen.js</url>
-          <line>280</line>
+          <line>262</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -580,8 +580,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/elvish-gen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
+        <state relative-caret-position="234">
+          <caret line="122" column="8" selection-start-line="122" selection-start-column="8" selection-end-line="122" selection-end-column="8" />
           <folding>
             <element signature="e#0#40#0" expanded="false" />
           </folding>

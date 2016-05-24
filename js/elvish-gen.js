@@ -111,24 +111,6 @@ var elvishGenerator = elvishGenerator || {};
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Pseudoclassical Inheritance
-    // (Javascript The Good Parts)
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    Function.prototype.method = function(name, func) {
-        if(this.prototype[name]) {
-            console.warn('Function.prototype.' + name + ' is already defined. This might be a problem.')
-        }
-        this.prototype[name] = func;
-        return this;
-    };
-
-    Function.method('extends', function (Parent) {
-        this.prototype = new Parent();
-        return this;
-    });
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ElvishNode
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -208,7 +190,7 @@ var elvishGenerator = elvishGenerator || {};
         QuenyaParser.prototype.constructor.call(this, text);
     }
 
-    QuenyaParser.extends(ElvishNodeParser);
+    QuenyaParser.prototype = new ElvishNodeParser();
 
     QuenyaParser.prototype.fillNode = function(node, remainingCharacters) {
         var remaining = remainingCharacters;
