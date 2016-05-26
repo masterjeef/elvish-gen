@@ -7,6 +7,15 @@ function SuperClass(arg){
 
 function TestClass(arg) {
     TestClass.prototype.constructor.call(this, arg);
+
+    // The reason we set that to this
+    var that = this;
+    function helper() {
+        var thisTop = this.top; // <- undefined, but it would seem that it should be the value of top
+        var thatTop = that.top; // <- the real value of top
+        // "this" in this context refers to the window
+    };
+    helper();
 };
 
 TestClass.prototype = new SuperClass();

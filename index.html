@@ -3,11 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Elvish Gen</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
-
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1>Elvish Gen</h1>
+                <p>Translate anything to Elvish in less than a minute!</p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="toTranslate" placeholder="Anything">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Translate</button>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <h1>Results</h1>
+                <div>
+                    <canvas class="elvish-result" id="result-canvas"></canvas>
+                </div>
+                <button class="btn btn-default">Download</button>
+            </div>
+        </div>
+    </div>
 </body>
     <!--<script src="js/test-grounds.js"></script>-->
+    <script src="js/jquery-2.2.4.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/elvish-gen.js"></script>
 </html>
