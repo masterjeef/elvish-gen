@@ -33,7 +33,7 @@ var elvishGenerator = elvishGenerator || {};
             'm' : 'm',
             'n' : 'n',
             'p' : 'p',
-            'q' : 'q',
+            //'q' : 'q', apparently there is no 'q' equivalent in Tengwar
             'r' : 'r',
             's' : 's',
             't' : 't',
@@ -43,7 +43,7 @@ var elvishGenerator = elvishGenerator || {};
             'x' : 'x',
             'z' : 'z'
         },
-        // This is what's considered the supplementary alphabet in Elvish
+        // This is what's considered the supplementary alphabet in Tengwar
         supplementary : {
             'ld' : 'ld',
             'rd' : 'rd',
@@ -53,7 +53,8 @@ var elvishGenerator = elvishGenerator || {};
             'nt' : 'nt',
             'nd' : 'nd',
             'mp' : 'mp',
-            'mb' : 'mb'
+            'mb' : 'mb',
+            'qu' : 'qu'
         }
     };
 

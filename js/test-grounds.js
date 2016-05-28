@@ -11,10 +11,11 @@ function TestClass(arg) {
     // The reason we set that to this
     var that = this;
     function helper() {
-        var thisTop = this.top; // <- undefined, but it would seem that it should be the value of top
-        var thatTop = that.top; // <- the real value of top
+        var thisTop = this.prop; // <- undefined, but it would seem that it should be the value of prop
+        var thatTop = that.prop; // <- the real value of prop
         // "this" in this context refers to the window
     };
+
     helper();
 };
 
@@ -22,4 +23,3 @@ TestClass.prototype = new SuperClass();
 
 var test = new TestClass("argument");
 var prop = test.prop;
-
