@@ -20,6 +20,14 @@ var elvishGenerator = elvishGenerator || {};
             'u' : 'u',
             'y' : 'y'
         },
+        doubleVowels : {
+            'aa' : 'aa',
+            'ee' : 'ee',
+            'ii' : 'ii',
+            'oo' : 'oo',
+            'uu' : 'uu',
+            'yy' : 'yy'
+        },
         consonants : {
             'b' : 'b',
             'c' : 'c',
@@ -43,6 +51,28 @@ var elvishGenerator = elvishGenerator || {};
             'x' : 'x',
             'z' : 'z'
         },
+        doubleConsonants : {
+            'bb' : 'bb',
+            'cc' : 'cc',
+            'dd' : 'dd',
+            'ff' : 'ff',
+            'gg' : 'gg',
+            'hh' : 'hh',
+            'jj' : 'jj',
+            'kk' : 'kk',
+            'll' : 'll',
+            'mm' : 'mm',
+            'nn' : 'nn',
+            'pp' : 'pp',
+            'rr' : 'rr',
+            'ss' : 'ss',
+            'tt' : 'tt',
+            'uu' : 'uu',
+            'vv' : 'vv',
+            'ww' : 'ww',
+            'xx' : 'xx',
+            'zz' : 'zz'
+        },
         // This is what's considered the supplementary alphabet in Tengwar
         supplementary : {
             'ld' : 'ld',
@@ -55,6 +85,15 @@ var elvishGenerator = elvishGenerator || {};
             'mp' : 'mp',
             'mb' : 'mb',
             'qu' : 'qu'
+        },
+        specialCharacters : {
+            ' ' : ' ',
+            '.' : '.',
+            '(' : '(',
+            ')' : ')',
+            '\"' : '\"',
+            ':' : ':',
+            '=' : '='
         }
     };
 
@@ -104,11 +143,11 @@ var elvishGenerator = elvishGenerator || {};
     };
 
     eg.Common.isDoubleConsonant = function (value) {
-        return eg.Common.isDouble(value) && eg.Common.isConsonant(eg.Common.first(value));
+        return alphabet.doubleConsonants[value];
     };
 
     eg.Common.isDoubleVowel = function (value) {
-        return eg.Common.isDouble(value) && eg.Common.isVowel(eg.Common.first(value));
+        return alphabet.doubleVowels[value];
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
