@@ -2,98 +2,102 @@
  * Created by Jeff on 5/17/2016.
  */
 
-var elvishGenerator = elvishGenerator || {};
+var tengwarTranscriber = tengwarTranscriber || {};
 
-(function(eg){
+(function(tt){
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constants/Lookups
-    // Eventually these will map to image paths
+    // These map to the unicode values of the characters in the font family
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     var alphabet = {
         vowels : {
-            'a' : 'a',
-            'e' : 'e',
-            'i' : 'i',
-            'o' : 'o',
-            'u' : 'u',
-            'y' : 'y'
+            'a' : '&#35;',
+            'e' : '&#36;',
+            'i' : '&#37;',
+            'o' : '&#94;',
+            'u' : '&#38;',
+            'y' : '&#204;'
         },
         doubleVowels : {
-            'aa' : 'aa',
-            'ee' : 'ee',
-            'ii' : 'ii',
-            'oo' : 'oo',
-            'uu' : 'uu',
-            'yy' : 'yy'
+            'aa' : '&#35;' + '&#67;',
+            'ee' : '&#36;' + '&#70;',
+            'ii' : '&#37;' + '&#66;',
+            'oo' : '&#94;' + '&#78;',
+            'uu' : '&#38;' + '&#74;',
+            'yy' : '&#204;' + '&#206;'
         },
         consonants : {
-            'b' : 'b',
-            'c' : 'c',
-            'd' : 'd',
-            'f' : 'f',
-            'g' : 'g',
-            'h' : 'h',
-            'j' : 'j',
-            'k' : 'k',
-            'l' : 'l',
-            'm' : 'm',
-            'n' : 'n',
-            'p' : 'p',
-            //'q' : 'q', apparently there is no 'q' equivalent in Tengwar
-            'r' : 'r',
-            's' : 's',
-            't' : 't',
-            'u' : 'u',
-            'v' : 'v',
-            'w' : 'w',
-            'x' : 'x',
-            'z' : 'z'
+            'b' : '&#119;',
+            'c' : '&#97;',
+            'd' : '&#50;',
+            'f' : '&#101;',
+            'g' : '&#120;',
+            'h' : '', // ???
+            'j' : '&#83;',
+            'k' : '&#122;',
+            'l' : '&#106;',
+            'm' : '&#116;',
+            'n' : '&#53;',
+            'p' : '&#113;',
+            'q' : '', // there is no 'q' equivalent in Tengwar (see qu below)
+            'r' : '&#55;', // as in "red"
+            //'r' : '&#54;', // as in "car"
+            's' : '&#42;', // 2nd form of s
+            't' : '&#49;',
+            'v' : '&#114;',
+            'w' : '&#110;',
+            'x' : '', // ???
+            //'y' : '&#104;', // y consonant
+            'z' : '&#75;'
+            //'z' : '&#44;'
         },
         doubleConsonants : {
-            'bb' : 'bb',
-            'cc' : 'cc',
-            'dd' : 'dd',
-            'ff' : 'ff',
-            'gg' : 'gg',
-            'hh' : 'hh',
-            'jj' : 'jj',
-            'kk' : 'kk',
-            'll' : 'll',
-            'mm' : 'mm',
-            'nn' : 'nn',
-            'pp' : 'pp',
-            'rr' : 'rr',
-            'ss' : 'ss',
-            'tt' : 'tt',
-            'uu' : 'uu',
-            'vv' : 'vv',
-            'ww' : 'ww',
-            'xx' : 'xx',
-            'zz' : 'zz'
+            'bb' : '&#119;' + '&#58;',
+            'cc' : '&#97;' + '&#58;',
+            'dd' : '&#50;' + '&#58;',
+            'ff' : '&#101;' + '&#58;',
+            'gg' : '&#120;' + '&#58;',
+            'hh' : '',
+            'jj' : '&#83;' + '&#58;',
+            'kk' : '&#122;' + '&#58;',
+            'll' : '&#106;' + '&#58;',
+            'mm' : '&#116;' + '&#58;',
+            'nn' : '&#53;' + '&#58;',
+            'pp' : '&#113;' + '&#58;',
+            'qq' : '',
+            'rr' : '&#55;' + '&#58;',
+            'ss' : '&#42;' + '&#58;',
+            'tt' : '&#49;' + '&#58;',
+            'vv' : '&#114;' + '&#58;',
+            'ww' : '&#110;' + '&#58;',
+            'xx' : '',
+            'zz' : '&#75;' + '&#58;'
         },
         // This is what's considered the supplementary alphabet in Tengwar
         supplementary : {
-            'ld' : 'ld',
-            'rd' : 'rd',
-            'th' : 'th',
-            'ch' : 'ch',
-            'sh' : 'sh',
-            'nt' : 'nt',
-            'nd' : 'nd',
-            'mp' : 'mp',
-            'mb' : 'mb',
-            'qu' : 'qu'
+            'ld' : '&#109;',
+            'rd' : '&#117;',
+            'th' : '&#51;',
+            'ch' : '&#99;',
+            'sh' : '&#100;',
+            'nt' : '&#49;&#123;',
+            'nd' : '', // ???
+            'mp' : '&#113;&#112;',
+            'mb' : '&#119;&#80;',
+            'qu' : '&#118;'
         },
-        specialCharacters : {
+        punctuation : {
             ' ' : ' ',
-            '.' : '.',
-            '(' : '(',
-            ')' : ')',
-            '\"' : '\"',
-            ':' : ':',
-            '=' : '='
+            '.' : '&#8208;',
+            ',' : '&#183;',
+            '(' : '&#8250;',
+            ')' : '&#8250;',
+            '\"' : '&#171;',
+            '=' : '&#172;',
+            '?' : '&#192;',
+            '!' : '&#193;'
         }
     };
 
@@ -101,29 +105,29 @@ var elvishGenerator = elvishGenerator || {};
     // Common Namespace
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    eg.Common = {};
+    tt.Common = {};
 
-    eg.Common.isVowel = function (value){
+    tt.Common.isVowel = function (value){
             return alphabet.vowels[value];
     };
 
-    eg.Common.isSupplementary = function(value) {
+    tt.Common.isSupplementary = function(value) {
         return alphabet.supplementary[value];
     };
 
-    eg.Common.truncateFront = function (value, amountToRemove){
+    tt.Common.truncateFront = function (value, amountToRemove){
         return value.substring(amountToRemove, value.length);
     };
 
-    eg.Common.take = function (value, numberOfCharacters) {
+    tt.Common.take = function (value, numberOfCharacters) {
         return value.substring(0, numberOfCharacters);
     };
 
-    eg.Common.first = function (value) {
+    tt.Common.first = function (value) {
         return value.charAt(0);
     };
 
-    eg.Common.isDouble = function (value, character) {
+    tt.Common.isDouble = function (value, character) {
         if(value.length !== 2) {
             return false;
         }
@@ -138,16 +142,25 @@ var elvishGenerator = elvishGenerator || {};
         return first === second;
     };
 
-    eg.Common.isConsonant = function (value) {
+    tt.Common.isConsonant = function (value) {
         return alphabet.consonants[value];
     };
 
-    eg.Common.isDoubleConsonant = function (value) {
+    tt.Common.isDoubleConsonant = function (value) {
         return alphabet.doubleConsonants[value];
     };
 
-    eg.Common.isDoubleVowel = function (value) {
+    tt.Common.isDoubleVowel = function (value) {
         return alphabet.doubleVowels[value];
+    };
+
+    tt.toQuenya = function(text)
+    {
+        var value = text.toLowerCase();
+        var quenyaParser = new QuenyaParser(value);
+        var nodes = quenyaParser.parseText();
+        nodes.print();
+        return nodes.toQuenya();
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,6 +183,32 @@ var elvishGenerator = elvishGenerator || {};
         if(this.nextNode) {
             this.nextNode.print();
         }
+    };
+
+    ElvishNode.prototype.toQuenya = function () {
+        var result = '';
+
+        if(this.middle.length > 0) {
+            result += alphabet.consonants[this.middle] ||
+                alphabet.doubleConsonants[this.middle] ||
+                alphabet.supplementary[this.middle] ||
+                alphabet.punctuation[this.middle] ||
+                this.middle;
+        }
+
+        if(this.bottom.length > 0) {
+            result += alphabet.vowels[this.bottom] || alphabet.doubleVowels[this.bottom];
+        }
+
+        if(this.top.length > 0){
+            result += alphabet.vowels[this.top] || alphabet.doubleVowels[this.top];
+        }
+
+        if(this.nextNode) {
+            result += this.nextNode.toQuenya();
+        }
+
+        return result;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,10 +235,10 @@ var elvishGenerator = elvishGenerator || {};
 
         // unrecognized character... just stick it in the middle and continue
         if (node.totalLetterCount() === 0){
-            node.middle = eg.Common.first(characters)
+            node.middle = tt.Common.first(characters)
         }
 
-        var remaining = eg.Common.truncateFront(characters, node.totalLetterCount());
+        var remaining = tt.Common.truncateFront(characters, node.totalLetterCount());
 
         node.nextNode = this.parse(remaining);
 
@@ -207,7 +246,7 @@ var elvishGenerator = elvishGenerator || {};
     };
 
     ElvishNodeParser.prototype.fillNode = function(node, remainingCharacters) {
-        var first = eg.Common.first(remainingCharacters);
+        var first = tt.Common.first(remainingCharacters);
         node.middle = first;
         return node;
     };
@@ -237,52 +276,52 @@ var elvishGenerator = elvishGenerator || {};
     QuenyaParser.prototype.tryFillMiddle = function(node, characters){
         // middle section
         // consonant || double consonant || supplementary
-        var firstTwo = eg.Common.take(characters, 2),
-            first = eg.Common.first(characters);
+        var firstTwo = tt.Common.take(characters, 2),
+            first = tt.Common.first(characters);
 
         // TODO: need to handle the two variations of r...
         // TODO: figure out if 'y' is a consonant
 
-        if(eg.Common.isDoubleConsonant(firstTwo) || eg.Common.isSupplementary(firstTwo)) {
+        if(tt.Common.isDoubleConsonant(firstTwo) || tt.Common.isSupplementary(firstTwo)) {
             node.middle = firstTwo;
-        } else if (eg.Common.isConsonant(first)) {
+        } else if (tt.Common.isConsonant(first)) {
             node.middle = first;
         }
 
-        return eg.Common.truncateFront(characters, node.middle.length);
+        return tt.Common.truncateFront(characters, node.middle.length);
     };
 
     QuenyaParser.prototype.tryFillBottom = function(node, characters) {
         // bottom section
         // 'y' || silent 'e' || double 'y' || double 'e'
-        var firstTwo = eg.Common.take(characters, 2),
-            first = eg.Common.first(characters);
+        var firstTwo = tt.Common.take(characters, 2),
+            first = tt.Common.first(characters);
 
         // TODO : find a more reliable way to determine silent e
-        var isSilentE = !eg.Common.isDouble(firstTwo) && characters.length === 1 && first === 'e';
+        var isSilentE = !tt.Common.isDouble(firstTwo) && characters.length === 1 && first === 'e';
 
-        if(eg.Common.isDouble(firstTwo, 'e') || eg.Common.isDouble(firstTwo, 'y')){
+        if(tt.Common.isDouble(firstTwo, 'e') || tt.Common.isDouble(firstTwo, 'y')){
             node.bottom = firstTwo;
         } else if(isSilentE || first === 'y') {
             node.bottom = first;
         }
 
-        return eg.Common.truncateFront(characters, node.bottom.length);
+        return tt.Common.truncateFront(characters, node.bottom.length);
     };
 
     QuenyaParser.prototype.tryFillTop = function(node, characters) {
         // top section
         // vowel || double vowel
-        var firstTwo = eg.Common.take(characters, 2),
-            first = eg.Common.first(characters);
+        var firstTwo = tt.Common.take(characters, 2),
+            first = tt.Common.first(characters);
 
-        if(eg.Common.isDoubleVowel(firstTwo)) {
+        if(tt.Common.isDoubleVowel(firstTwo)) {
             node.top = firstTwo;
-        } else if(eg.Common.isVowel(first)) {
+        } else if(tt.Common.isVowel(first)) {
             node.top = first;
         }
 
-        return eg.Common.truncateFront(characters, node.top.length);
+        return tt.Common.truncateFront(characters, node.top.length);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,9 +334,10 @@ var elvishGenerator = elvishGenerator || {};
     var quenyaParser = new QuenyaParser(text);
     var nodes = quenyaParser.parseText();
     nodes.print();
+    console.log(nodes.toQuenya());
 
     var genericParser = new ElvishNodeParser(text);
     nodes = genericParser.parseText();
     nodes.print();
 
-})(elvishGenerator);
+})(tengwarTranscriber);

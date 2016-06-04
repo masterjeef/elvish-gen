@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Elvish Gen</title>
+    <title>Tengwar Transcriber</title>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/style.css"/>
 </head>
@@ -10,30 +10,30 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
-                <h1>Elvish Gen</h1>
-                <p>Translate anything to Elvish in less than a minute!</p>
+                <h1>Tengwar Transcriber</h1>
+                <p>Transcribe any English characters to Tengwar in less than a minute!</p>
                 <form>
                     <div class="form-group">
                         <input type="text" class="form-control" id="toTranslate" placeholder="Anything">
                     </div>
-                    <button type="submit" class="btn btn-primary">Translate</button>
+                    <button type="submit" class="btn btn-primary">Transcribe</button>
                 </form>
             </div>
             <div class="col-lg-6">
-                <h1>Results</h1>
-                <div id="result-html">
-
+                <h2>Result</h2>
+                <div class="panel panel-default">
+                    <div id="result" class="panel-body tengwar-quenya">
+                        &#83;&#35;&#101;&#58;
+                    </div>
                 </div>
-                <div>
-                    <canvas class="elvish-result" id="result-canvas"></canvas>
-                </div>
-                <button class="btn btn-default">Download</button>
+            </div>
+            <div class="col-sm-12">
+                <h2>Character Chart</h2>
             </div>
         </div>
     </div>
 </body>
-    <!--<script src="js/test-grounds.js"></script>-->
     <script src="js/jquery-2.2.4.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/elvish-gen.js"></script>
+    <script src="js/tengwar-transcriber.js"></script>
 </html>

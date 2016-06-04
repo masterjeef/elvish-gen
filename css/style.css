@@ -1,3 +1,13 @@
-.elvish-result {
-    border: 2px solid #EEE;
+@font-face {
+    font-family: 'tengwar_annatarregular';
+    src: url('../fonts/tngan-webfont.woff2') format('woff2'),
+    url('../fonts/tngan-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.tengwar-quenya {
+    font-family: 'tengwar_annatarregular';
+    font-size: 2em;
 }
