@@ -10,10 +10,26 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.css$/, loader: "style!css" },
-            { test: /\.(eot|svg|ttf|woff|woff2)$/, loader: "file-loader?name=fonts/[name].[ext]"},
-            { test: /\.(png|jpg|gif)$/, loader: "file-loader?name=img/[name].[ext]"},
-            { test: /\.(html)$/, loader: "file-loader?name=[name].[ext]"}
+            {
+                test: /\.css$/,
+                loader: "style!css",
+                exclude: "node_modules"
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: "file-loader?name=fonts/[name].[ext]",
+                exclude: "node_modules"
+            },
+            {
+                test: /\.(png|jpg|gif)$/,
+                loader: "file-loader?name=img/[name].[ext]",
+                exclude: "node_modules"
+            },
+            {
+                test: /\.(html)$/,
+                loader: "file-loader?name=[name].[ext]",
+                exclude: "node_modules"
+            }
         ]
     },
     watch: true
