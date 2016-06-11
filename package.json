@@ -1,0 +1,27 @@
+{
+  "name": "elvish-gen",
+  "version": "1.0.0",
+  "description": "Tengwar is a type of Elvish scripting. My transcriber simply converts English characters to Tengwar, it will not translate English to Tengwar.\r This tool is only useful for learning how to write your name in Elvish script.",
+  "main": "index.js",
+  "dependencies": {
+    "style-loader": "^0.13.1",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "webpack": "^1.13.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/masterjeef/elvish-gen.git"
+  },
+  "keywords": [],
+  "author": "Jeff Linton <jslinton44@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/masterjeef/elvish-gen/issues"
+  },
+  "homepage": "https://github.com/masterjeef/elvish-gen#readme"
+}
