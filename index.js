@@ -4,7 +4,7 @@ require("./index.html");
 
 require("./css/bootstrap.min.css");
 
-require("./css/style.css");
+require("./css/style.scss");
 
 require("./js/jquery-2.2.4.min.js");
 

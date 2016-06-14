@@ -9,9 +9,12 @@
     "file-loader": "^0.8.5",
     "webpack": "^1.13.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "sass-loader": "^3.2.0",
+    "url-loader": "^0.5.7"
+  },
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server -p"
   },
   "repository": {
     "type": "git",
@@ -23,5 +26,5 @@
   "bugs": {
     "url": "https://github.com/masterjeef/elvish-gen/issues"
   },
-  "homepage": "https://github.com/masterjeef/elvish-gen#readme"
+  "homepage": "https://github.com/masterjeef/elvish-gen"
 }

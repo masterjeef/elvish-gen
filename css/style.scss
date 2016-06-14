@@ -1,3 +1,5 @@
+$primary-color: #F00;
+
 @font-face {
     font-family: 'tengwar_annatarregular';
     src: url('../fonts/tngan-webfont.woff2') format('woff2'),
@@ -10,4 +12,8 @@
 .tengwar-quenya {
     font-family: 'tengwar_annatarregular';
     font-size: 2em;
+}
+
+h1 {
+  color: $primary-color;
 }
