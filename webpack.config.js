@@ -24,13 +24,8 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
-                test: /\.(eot|svg|ttf|woff|woff2)$/,
-                loader: "file-loader?name=fonts/[name].[ext]",
-                exclude: /node_modules/
-            },
-            {
-                test: /\.(png|jpg|gif)$/,
-                loader: "file-loader?name=img/[name].[ext]",
+                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/,
+                loader: "url-loader",
                 exclude: /node_modules/
             },
             {

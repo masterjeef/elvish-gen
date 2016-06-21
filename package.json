@@ -1,7 +1,7 @@
 {
   "name": "elvish-gen",
   "version": "1.0.0",
-  "description": "Tengwar is a type of Elvish scripting. My transcriber simply converts English characters to Tengwar, it will not translate English to Tengwar.\r This tool is only useful for learning how to write your name in Elvish script.",
+  "description": "Tengwar is a type of Elvish scripting. My transcriber simply converts English characters to Tengwar, it will not translate English to Tengwar.",
   "main": "index.js",
   "dependencies": {
     "style-loader": "^0.13.1",
