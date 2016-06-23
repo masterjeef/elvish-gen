@@ -1,4 +1,5 @@
 var webpack = require('webpack'),
+    ProvidePlugin = require('webpack/lib/ProvidePlugin'),
     path = require('path');
 
 module.exports = {
@@ -9,8 +10,15 @@ module.exports = {
         filename: "bundle.js"
     },
     devServer: {
-      contentBase: 'dist'
+      contentBase: '/dist/'
     },
+    plugins: [
+        new ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery'
+        })
+    ],
     module: {
         loaders: [
             {
@@ -24,13 +32,23 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/,
-                loader: "url-loader",
+                test: /\.(eot|svg|ttf|png|jpg|gif)$/,
+                loader: "url-loader?limit=10000",
                 exclude: /node_modules/
             },
             {
                 test: /\.(html)$/,
                 loader: "file-loader?name=[name].[ext]",
+                exclude: /node_modules/
+            },
+            {
+                test: /\.(woff)/,
+                loader: "url?limit=10000&mimetype=application/font-woff",
+                exclude: /node_modules/
+            },
+            {
+                test: /\.(woff2)/,
+                loader: "url?limit=10000&mimetype=application/font-woff2",
                 exclude: /node_modules/
             }
         ]

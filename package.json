@@ -4,17 +4,20 @@
   "description": "Tengwar is a type of Elvish scripting. My transcriber simply converts English characters to Tengwar, it will not translate English to Tengwar.",
   "main": "index.js",
   "dependencies": {
-    "style-loader": "^0.13.1",
-    "css-loader": "^0.23.1",
-    "file-loader": "^0.8.5",
-    "webpack": "^1.13.1"
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.4"
   },
   "devDependencies": {
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
     "sass-loader": "^3.2.0",
-    "url-loader": "^0.5.7"
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.1"
   },
   "scripts": {
-    "start": "webpack-dev-server -p"
+    "start": "webpack-dev-server --open -p",
+    "prod": "webpack -p --no-color"
   },
   "repository": {
     "type": "git",
