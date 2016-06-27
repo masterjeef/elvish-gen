@@ -13,4 +13,6 @@ require("./css/style.scss");
 
 //require("./js/bootstrap.min.js");
 
-require("./js/tengwar-transcriber");
+
+
+require("./js/app");

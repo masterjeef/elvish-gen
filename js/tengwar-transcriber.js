@@ -159,6 +159,9 @@ var tengwarTranscriber = tengwarTranscriber || {};
         var value = text.toLowerCase();
         var quenyaParser = new QuenyaParser(value);
         var nodes = quenyaParser.parseText();
+        if(!nodes) {
+            return '';
+        }
         nodes.print();
         return nodes.toQuenya();
     };
@@ -341,3 +344,5 @@ var tengwarTranscriber = tengwarTranscriber || {};
     nodes.print();
 
 })(tengwarTranscriber);
+
+window.tengwarTranscriber = tengwarTranscriber;

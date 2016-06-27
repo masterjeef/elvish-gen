@@ -17,6 +17,10 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery',
             'window.jQuery': 'jquery'
+        }),
+        new ProvidePlugin({
+            transcriber: './tengwar-transcriber',
+            'window.transcriber': './tengwar-transcriber'
         })
     ],
     module: {

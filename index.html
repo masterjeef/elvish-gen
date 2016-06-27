@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="tengwarTranscriber">
 <head>
     <meta charset="UTF-8">
     <title>Tengwar Transcriber</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container" ng-controller="TengwarController as tc">
         <div class="row">
             <div class="col-lg-6">
                 <h1>Tengwar Transcriber</h1>
                 <p>Transcribe any English characters to Tengwar in less than a minute!</p>
                 <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="toTranslate" placeholder="Anything">
+                        <input type="text" class="form-control" id="toTranslate" placeholder="Anything" ng-model="tc.originalValue" ng-change="tc.transcribe()">
                     </div>
-                    <button type="submit" class="btn btn-primary">Transcribe</button>
                 </form>
             </div>
             <div class="col-lg-6">
                 <h2>Result</h2>
                 <div class="panel panel-default">
-                    <div id="result" class="panel-body tengwar-quenya">
-                        &#83;&#35;&#101;&#58;
+                    <div id="result" class="panel-body tengwar-quenya" ng-bind-html="renderHtml(tc.tengwarResult)">
                     </div>
                 </div>
             </div>

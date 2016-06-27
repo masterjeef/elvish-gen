@@ -4,6 +4,7 @@
   "description": "Tengwar is a type of Elvish scripting. My transcriber simply converts English characters to Tengwar, it will not translate English to Tengwar.",
   "main": "index.js",
   "dependencies": {
+    "angular": "^1.5.7",
     "bootstrap": "^3.3.6",
     "jquery": "^2.2.4"
   },
