@@ -9,10 +9,11 @@ angular.module('tengwarTranscriber', [])
         var tc = this;
 
         tc.originalValue = '';
-        tc.tengwarResult = '&#83;&#35;&#101;&#58;';
+        tc.tengwarResult = '';
 
         tc.transcribe = function () {
-                console.log(transcriber);
+
+                console.log(transcriber); // <-- why do I need this? This is bad. ):
 
                 var quenya = window.tengwarTranscriber.toQuenya(tc.originalValue);
 

@@ -157,12 +157,17 @@ var tengwarTranscriber = tengwarTranscriber || {};
     tt.toQuenya = function(text)
     {
         var value = text.toLowerCase();
+
         var quenyaParser = new QuenyaParser(value);
+
         var nodes = quenyaParser.parseText();
+
         if(!nodes) {
             return '';
         }
-        nodes.print();
+
+        //nodes.print();
+
         return nodes.toQuenya();
     };
 
@@ -197,6 +202,8 @@ var tengwarTranscriber = tengwarTranscriber || {};
                 alphabet.supplementary[this.middle] ||
                 alphabet.punctuation[this.middle] ||
                 this.middle;
+        } else if(this.totalLetterCount() > 0) {
+            result += '&#96;';
         }
 
         if(this.bottom.length > 0) {
@@ -327,22 +334,6 @@ var tengwarTranscriber = tengwarTranscriber || {};
         return tt.Common.truncateFront(characters, node.top.length);
     };
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // The rest is temporary, have not wired up the UI
-    // This simply demonstrates usage
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    var text = 'sheldon';
-
-    var quenyaParser = new QuenyaParser(text);
-    var nodes = quenyaParser.parseText();
-    nodes.print();
-    console.log(nodes.toQuenya());
-
-    var genericParser = new ElvishNodeParser(text);
-    nodes = genericParser.parseText();
-    nodes.print();
-
 })(tengwarTranscriber);
 
-window.tengwarTranscriber = tengwarTranscriber;
+window.tengwarTranscriber = tengwarTranscriber; // <-- this is horrible, figure out a better way
