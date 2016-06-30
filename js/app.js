@@ -4,6 +4,8 @@
 
 require("angular");
 
+
+
 angular.module('tengwarTranscriber', [])
     .controller('TengwarController', ['$scope', '$http', '$sce', function ($scope, $http, $sce) {
         var tc = this;
@@ -11,12 +13,15 @@ angular.module('tengwarTranscriber', [])
         tc.originalValue = '';
         tc.tengwarResult = '';
 
+        console.log(transcriber); // <-- why do I need this? This is bad. ):
+
+        var vowels = window.tengwarTranscriber.vowels();
+        console.log(vowels);
+        tc.tengwarVowels = vowels;
+
         tc.transcribe = function () {
-
-                console.log(transcriber); // <-- why do I need this? This is bad. ):
-
                 var quenya = window.tengwarTranscriber.toQuenya(tc.originalValue);
-
+                
                 tc.tengwarResult = quenya;
         };
 

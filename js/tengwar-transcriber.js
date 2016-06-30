@@ -154,6 +154,28 @@ var tengwarTranscriber = tengwarTranscriber || {};
         return alphabet.doubleVowels[value];
     };
 
+    tt.Common.toArray = function (obj) {
+        var result = [];
+
+        if(!obj) {
+          return result;
+        }
+
+        for(var key in obj){
+            if(obj.hasOwnProperty(key)) {
+
+                var value = {
+                    'key': key,
+                    'value': obj[key]
+                };
+
+                result.push(value);
+            }
+        }
+
+        return result;
+    };
+
     tt.toQuenya = function(text)
     {
         var value = text.toLowerCase();
@@ -169,6 +191,10 @@ var tengwarTranscriber = tengwarTranscriber || {};
         //nodes.print();
 
         return nodes.toQuenya();
+    };
+
+    tt.vowels = function () {
+        return tt.Common.toArray(alphabet.vowels);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,7 +359,7 @@ var tengwarTranscriber = tengwarTranscriber || {};
 
         return tt.Common.truncateFront(characters, node.top.length);
     };
-
+    
 })(tengwarTranscriber);
 
 window.tengwarTranscriber = tengwarTranscriber; // <-- this is horrible, figure out a better way
