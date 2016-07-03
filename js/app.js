@@ -15,13 +15,11 @@ angular.module('tengwarTranscriber', [])
 
         console.log(transcriber); // <-- why do I need this? This is bad. ):
 
-        var vowels = window.tengwarTranscriber.vowels();
-        console.log(vowels);
-        tc.tengwarVowels = vowels;
+        tc.tengwarVowels = window.tengwarTranscriber.vowels();
+        tc.tengwarDoubleVowels = window.tengwarTranscriber.doubleVowels();
 
         tc.transcribe = function () {
                 var quenya = window.tengwarTranscriber.toQuenya(tc.originalValue);
-                
                 tc.tengwarResult = quenya;
         };
 
