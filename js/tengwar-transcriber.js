@@ -21,12 +21,12 @@ var tengwarTranscriber = tengwarTranscriber || {};
             'y' : '&#204;'
         },
         doubleVowels : {
-            'aa' : '&#35;' + '&#67;',
-            'ee' : '&#36;' + '&#70;',
-            'ii' : '&#37;' + '&#66;',
-            'oo' : '&#94;' + '&#78;',
-            'uu' : '&#38;' + '&#74;',
-            'yy' : '&#204;' + '&#206;'
+            'aa' : '&#35;&#67;',
+            'ee' : '&#36;&#70;',
+            'ii' : '&#37;&#66;',
+            'oo' : '&#94;&#72;',
+            'uu' : '&#38;&#74;',
+            'yy' : '&#204;&#180;'
         },
         consonants : {
             'b' : '&#119;',
@@ -62,7 +62,7 @@ var tengwarTranscriber = tengwarTranscriber || {};
             'hh' : '',
             'jj' : '&#83;' + '&#58;',
             'kk' : '&#122;' + '&#58;',
-            'll' : '&#106;' + '&#58;',
+            'll' : '&#106;' + '&#237;',
             'mm' : '&#116;' + '&#58;',
             'nn' : '&#53;' + '&#58;',
             'pp' : '&#113;' + '&#58;',
@@ -249,7 +249,7 @@ var tengwarTranscriber = tengwarTranscriber || {};
                 alphabet.punctuation[this.middle] ||
                 this.middle;
         } else if(this.totalLetterCount() > 0) {
-            result += '&#96;';
+            result += '&#96;&#8198;';
         }
 
         if(this.bottom.length > 0) {
