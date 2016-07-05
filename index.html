@@ -24,9 +24,22 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <h2>Character Chart</h2>
+                <h2>Characters</h2>
+                <!-- Vowels -->
                 <div class="row">
                     <div class="col-sm-1 text-center" ng-repeat="elvishChar in tc.tengwarVowels">
+                        <div class="panel panel-default">
+                            <div class="panel-body tengwar-quenya">
+                                &#8194;<span ng-bind-html="renderHtml(elvishChar.value)"></span>
+                            </div>
+                            <div class="panel-footer text-center">
+                                {{elvishChar.key}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Double Vowels -->
+                    <div class="col-sm-1 text-center" ng-repeat="elvishChar in tc.tengwarDoubleVowels">
                         <div class="panel panel-default">
                             <div class="panel-body tengwar-quenya">
                                 &#8194;<span ng-bind-html="renderHtml(elvishChar.value)"></span>
@@ -36,10 +49,48 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-1 text center" ng-repeat="elvishChar in tc.tengwarDoubleVowels">
+
+                    <!-- Consonants -->
+                    <div class="col-sm-1 text-center" ng-repeat="elvishChar in tc.tengwarConsonants" ng-if="elvishChar.value !== ''">
                         <div class="panel panel-default">
                             <div class="panel-body tengwar-quenya">
-                                &#8194;<span ng-bind-html="renderHtml(elvishChar.value)"></span>
+                                <span ng-bind-html="renderHtml(elvishChar.value)"></span>
+                            </div>
+                            <div class="panel-footer">
+                                {{elvishChar.key}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Double Consonants -->
+                    <div class="col-sm-1 text-center" ng-repeat="elvishChar in tc.tengwarDoubleConsonants" ng-if="elvishChar.value !== ''">
+                        <div class="panel panel-default">
+                            <div class="panel-body tengwar-quenya">
+                                <span ng-bind-html="renderHtml(elvishChar.value)"></span>
+                            </div>
+                            <div class="panel-footer">
+                                {{elvishChar.key}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Supplementary -->
+                    <div class="col-sm-1 text-center" ng-repeat="elvishChar in tc.tengwarSupplementary" ng-if="elvishChar.value !== ''">
+                        <div class="panel panel-default">
+                            <div class="panel-body tengwar-quenya">
+                                <span ng-bind-html="renderHtml(elvishChar.value)"></span>
+                            </div>
+                            <div class="panel-footer">
+                                {{elvishChar.key}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Punctuation -->
+                    <div class="col-sm-1 text-center" ng-repeat="elvishChar in tc.tengwarPunctuation" ng-if="elvishChar.value !== ' '">
+                        <div class="panel panel-default">
+                            <div class="panel-body tengwar-quenya">
+                                <span ng-bind-html="renderHtml(elvishChar.value)"></span>
                             </div>
                             <div class="panel-footer">
                                 {{elvishChar.key}}

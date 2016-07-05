@@ -17,6 +17,10 @@ angular.module('tengwarTranscriber', [])
 
         tc.tengwarVowels = window.tengwarTranscriber.vowels();
         tc.tengwarDoubleVowels = window.tengwarTranscriber.doubleVowels();
+        tc.tengwarConsonants = window.tengwarTranscriber.consonants();
+        tc.tengwarDoubleConsonants = window.tengwarTranscriber.doubleConsonants();
+        tc.tengwarSupplementary = window.tengwarTranscriber.supplementary();
+        tc.tengwarPunctuation = window.tengwarTranscriber.punctuation();
 
         tc.transcribe = function () {
                 var quenya = window.tengwarTranscriber.toQuenya(tc.originalValue);

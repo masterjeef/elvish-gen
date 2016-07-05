@@ -92,8 +92,8 @@ var tengwarTranscriber = tengwarTranscriber || {};
             ' ' : ' ',
             '.' : '&#8208;',
             ',' : '&#183;',
-            '(' : '&#8250;',
-            ')' : '&#8250;',
+            '(' : '&#338;',
+            ')' : '&#339;',
             '\"' : '&#171;',
             '=' : '&#172;',
             '?' : '&#192;',
@@ -199,6 +199,22 @@ var tengwarTranscriber = tengwarTranscriber || {};
 
     tt.doubleVowels = function () {
         return tt.Common.toArray(alphabet.doubleVowels);
+    };
+
+    tt.consonants = function () {
+        return tt.Common.toArray(alphabet.consonants);
+    };
+
+    tt.doubleConsonants = function () {
+        return tt.Common.toArray(alphabet.doubleConsonants);
+    };
+
+    tt.supplementary = function () {
+        return tt.Common.toArray(alphabet.supplementary);
+    };
+
+    tt.punctuation = function () {
+        return tt.Common.toArray(alphabet.punctuation);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
