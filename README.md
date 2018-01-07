@@ -18,7 +18,9 @@ This will start webpack-dev-server which will serve the production ready files f
 https://imgur.com/gallery/ATqDS
 
 How I interpret 'r' :
+
 `as in 'car'` - means 'r' is preceded by a vowel
+
 `as in 'red'` - means everything else
 
 The 'r' variation could also be a trilled 'r' or a non trilled 'r' (according to the spoken Elvish). More research is needed.
